@@ -9,7 +9,6 @@ using System.Collections.Generic;
 using System.Runtime.Serialization.Formatters.Binary;
 using AppUpdate.Common;
 using AppUpdate.Tasks;
-using System.Threading;
 
 namespace AppUpdate.Utils
 {
@@ -113,7 +112,8 @@ namespace AppUpdate.Utils
 
 				ThreadPool.QueueUserWorkItem(ConnectPipe, state);
 				//A rather arbitary five seconds, perhaps better to be user configurable at some point?
-				state.eventWaitHandle.WaitOne(10000);
+                int millisecondsTimeout = 120 * 1000; // was 10000.  Jared
+                state.eventWaitHandle.WaitOne(millisecondsTimeout);
 
 				//failed to connect client pipe
 				if (state.result == 0) return null;
