@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using System.Collections.Specialized;
 using System.Diagnostics;
 using System.Globalization;
@@ -7,6 +8,8 @@ using System.Threading;
 using System.Windows.Forms;
 using System.Xml;
 using FeedBuilder.Properties;
+using LionFire;
+
 namespace FeedBuilder
 {
 	public partial class frmMain : Form
@@ -276,9 +279,9 @@ namespace FeedBuilder
 
                     //File Exists
                     cond = doc.CreateElement("FileExistsCondition");
-                    cond.SetAttribute("type", "or");
+                    cond.SetAttribute("type", "not");
                     conds.AppendChild(cond);
-                    
+                    hasFirstCondition = true;
 
 					//Version
 					if (chkVersion.Checked && !string.IsNullOrEmpty(fileInfoEx.FileVersion)) {
@@ -440,6 +443,8 @@ namespace FeedBuilder
 			}
 		}
 
+        private static ILogger l = Log.Get();
+		
 		private void ReadFiles()
 		{
 			if (string.IsNullOrEmpty(txtOutputFolder.Text.Trim()) || !Directory.Exists(txtOutputFolder.Text.Trim())) return;
@@ -460,7 +465,17 @@ namespace FeedBuilder
 				thisItem.SubItems.Add(thisInfo.FileInfo.Length.ToString(CultureInfo.InvariantCulture));
 				thisItem.SubItems.Add(thisInfo.FileInfo.LastWriteTime.ToString(CultureInfo.InvariantCulture));
 				thisItem.SubItems.Add(thisInfo.Hash);
-				thisItem.Checked = (!Settings.Default.IgnoreFiles.Contains(thisInfo.FileInfo.Name));
+
+                
+				thisItem.Checked = (!Settings.Default.IgnoreFiles.OfType<string>().Where(z => thisInfo.FileInfo.ToString().EndsWith(z)).Any()); // Jared
+                if (thisItem.Checked)
+                {
+                    l.Info(thisInfo.FileInfo.ToString());
+                }
+                else
+                {
+                    l.Debug(thisInfo.FileInfo.ToString() + " ignored");
+                }
 				thisItem.Tag = thisInfo;
 				lstFiles.Items.Add(thisItem);
 			}
