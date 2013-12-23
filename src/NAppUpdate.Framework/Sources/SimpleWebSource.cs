@@ -29,6 +29,8 @@ namespace AppUpdate.Sources
 		{
 			string data = string.Empty;
 
+            // Eats an exception on first run: https://connect.microsoft.com/VisualStudio/feedback/details/773666/webrequest-create-eats-an-ioexception-on-the-first-call
+
 			var request = WebRequest.Create(FeedUrl);
             request.CachePolicy = new HttpRequestCachePolicy(HttpRequestCacheLevel.NoCacheNoStore);
             request.Headers.Add("Cache-Control", "no-cache");
