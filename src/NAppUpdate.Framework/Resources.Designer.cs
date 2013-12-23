@@ -69,15 +69,5 @@ namespace AppUpdate {
                 return ((byte[])(obj));
             }
         }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Byte[].
-        /// </summary>
-        internal static byte[] updaterorig {
-            get {
-                object obj = ResourceManager.GetObject("updaterorig", resourceCulture);
-                return ((byte[])(obj));
-            }
-        }
     }
 }
