@@ -142,7 +142,7 @@ namespace NAppUpdate.Updater
                         }
                         FileSystem.DeleteDirectory(backupFolder);
                     }
-                    MessageBox.Show("更新失败");
+                    MessageBox.Show("Unsuccessful update.  Attempted to revert.");
                 }
 
                 // Start the application only if requested to do so
