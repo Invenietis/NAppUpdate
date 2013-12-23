@@ -22,7 +22,7 @@ namespace AppUpdate.Conditions
         {
             string localPath = !string.IsNullOrEmpty(LocalPath) ? LocalPath : Utils.Reflection.GetNauAttribute(task, "LocalPath") as string;
             if (string.IsNullOrEmpty(localPath))
-                return true;
+                return false;
 
             return File.Exists(localPath);
         }
