@@ -56,14 +56,22 @@ namespace AppUpdate.Common
 
 		public void Log(SeverityLevel severity, string message, params object[] args)
 		{
-			lock (LogItems)
-			LogItems.Add(new LogItem
+            var li  = new LogItem
 			             	{
 			             		Message = string.Format(message, args),
 			             		Severity = severity,
 			             		Timestamp = DateTime.Now,
-			             	});
+			             	};
+			lock (LogItems)
+            {
+			    LogItems.Add(li);
+            }
+
+            var ev = Logged;
+            if (ev != null) ev(li);
 		}
+
+        public event Action<LogItem> Logged;
 
 		public void Log(Exception exception)
 		{
